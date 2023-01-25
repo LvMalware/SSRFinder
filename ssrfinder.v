@@ -15,7 +15,7 @@ fn ssrf_fuzz(server string, queue chan string) int {
 		mut target := urllib.parse(server) or { break }
 		target.host = md5.hexhash(url.hostname() + url.escaped_path()) + "." + target.hostname()
 		for key, val in query.to_map() {
-			query.set(key, "$target")
+			query.set(key, target.str())
 			url.raw_query = query.encode()
 			http.get(url.str()) or { }
 			query.set(key, val[0])
